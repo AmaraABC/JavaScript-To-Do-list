@@ -1,0 +1,99 @@
+* {
+    padding: 0;
+    margin: 0;
+    text-decoration: none;
+    outline: none;
+    font-family: Verdana;
+    box-sizing: border-box;
+}
+
+html,
+body {
+    height: 100%;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+body {
+    /* Modification de la couleur du site */
+    background-color: rgb(248, 229, 206);
+}
+
+/* Stylisation de l'en-tête de page */
+.header {
+    background-color: rgb(241, 205, 158);
+    padding: 1.75vw 0;
+    transition: 1.5s;
+    border-bottom: 4px dashed chocolate;
+}
+
+.header-title {
+    color: chocolate;
+    text-transform: uppercase;
+    font-size: clamp(28px, 4vw, 4rem);
+    font-weight: lighter;
+    text-align: center;
+    text-shadow: -.55vh 0 0 rgb(2, 117, 125);
+    line-height: 1;
+}
+
+/* Stylisation de la section concernant l'ajout des tâches */
+.main-list {
+    width: 100%;
+    padding: 4vw;
+    flex: 1;
+}
+
+.task-input {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+
+    input {
+        padding: 1.5vh;
+        width: 65%;
+        min-width: 200px;
+        border: 2px solid chocolate;
+        /* margin-right: 1rem; */
+    }
+}
+
+.task-input-buttons {
+    display: inline-flex;
+    justify-content: center;
+
+    #submit-button,
+    #reset-button {
+        padding: .8em 1em;
+    }
+}
+
+/* Stylisation de la balise <hr> - Séparateur */
+.section-delimiter {
+    border: .5px rgb(36, 35, 35) dashed;
+    margin: 2rem 0;
+}
+
+/* Stylisation de la section qui affiche les tâches */
+.task-list {
+    font-size: 2.2vh;
+    text-align: center;
+    margin-bottom: 2rem;
+}
+
+/* Pied de page */
+.footer {
+    background-color: rgb(241, 205, 158);
+    padding: 1.5vw 0;
+    border-top: 4px dashed chocolate;
+}
+
+.footer-copyright {
+    font-size: 2.5vh;
+    font-weight: bold;
+    text-align: center;
+    color: chocolate;
+    text-shadow: -.175vh 0 0 rgb(2, 117, 125);
+    letter-spacing: .015rem;
+}
