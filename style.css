@@ -87,6 +87,7 @@ body {
     background-color: rgb(241, 205, 158);
     padding: 1.5vw 0;
     border-top: 4px dashed chocolate;
+    margin-top: 2rem;
 }
 
 .footer-copyright {

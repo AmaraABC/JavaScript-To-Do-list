@@ -30,25 +30,26 @@ function resetText() {
 const output = document.getElementById("task-output");
 output.style.display = "grid";
 output.style.placeItems = "start center";
-const tabletResponsive = window.matchMedia("(max-width: 767px)");
-const phoneResponsive = window.matchMedia("(max-width: 374px)");
+output.style.gap = "1.75rem";
+const minLaptopResponsive = window.matchMedia("max-width: 1025px");
+const tabletResponsive = window.matchMedia("(max-width: 900px)");
+const phoneResponsive = window.matchMedia("(max-width: 684px)");
 
-function handleMediaChange(a, b) {
-    if (b.matches) {
-        output.style.gridTemplateColumns = "repeat(1, 1fr)";
-        output.style.rowGap = "1rem";
-    } else if (a.matches) {
-        output.style.gridTemplateColumns = "repeat(2, 1fr)";
-        output.style.rowGap = "1rem";
+function handleMediaChange(a, b, c) {
+    if (c.matches) {
+        output.style.gridTemplateColumns = "repeat(auto-fit, minmax(260px, 1fr))";
+        output.style.justifyContent = "center";
+    } else if (b.matches) {
+        output.style.gridTemplateColumns = "repeat(2, minmax(290px, 1fr))";
     } else {
-        output.style.gridTemplateColumns = "repeat(4, .5fr)";
-        output.style.rowGap = "2rem";
+        output.style.gridTemplateColumns = "repeat(3, 1fr)";
     }
 };
 
-handleMediaChange(tabletResponsive, phoneResponsive);
-tabletResponsive.addEventListener('change', () => handleMediaChange(tabletResponsive, phoneResponsive));
-phoneResponsive.addEventListener('change', () => handleMediaChange(tabletResponsive, phoneResponsive));
+handleMediaChange(minLaptopResponsive, tabletResponsive, phoneResponsive);
+minLaptopResponsive.addEventListener('change', () => handleMediaChange(minLaptopResponsive, tabletResponsive, phoneResponsive));
+tabletResponsive.addEventListener('change', () => handleMediaChange(minLaptopResponsive, tabletResponsive, phoneResponsive));
+phoneResponsive.addEventListener('change', () => handleMediaChange(minLaptopResponsive, tabletResponsive, phoneResponsive));
 
 // Fonction pour l'affichage de chaque tâche sous forme de liste
 function displayTasks() {
@@ -59,37 +60,40 @@ function displayTasks() {
         const taskDiv = document.createElement('div');
         taskDiv.setAttribute('id', `task-${task.id}`);
         // Ajout de styles pour la div
+        taskDiv.style.display = "grid";
+        taskDiv.style.gridTemplateRows = "subgrid"
         taskDiv.style.padding = ".9em";
         taskDiv.style.backgroundColor = "white";
         taskDiv.style.border = "2px dashed rgb(2, 117, 125)";
         taskDiv.style.borderRadius = "6px";
         taskDiv.style.boxShadow = "9px 9px rgb(245, 165, 60)";
-        taskDiv.style.width = "clamp(160px, 19vw, 280px)";
+        taskDiv.style.width = "clamp(260px, 27.5vw, 325px)";
+        taskDiv.style.gridRow = "span 2";
 
         // Création d'une section qui va contenir l'intitulé et la date de création de la tâche
         const taskInfo = document.createElement('section');
         taskInfo.classList.add('task-info');
         // Ajout de styles pour la section
-        taskInfo.style.display = "grid";
-        taskInfo.style.gridTemplateRows = "subgrid";
+        taskInfo.style.display = "flex";
+        taskInfo.style.flexFlow = "column wrap"
+        taskInfo.style.gap = ".5rem";
         taskInfo.style.wordBreak = "break-word";
         taskInfo.style.overflowWrap = "break-word";
         taskInfo.style.whiteSpace = "normal";
-        taskInfo.style.gridRow = "span 2";
 
         // Création des éléments de la tâche
         const taskName = document.createElement('p'); // Nom de la tâche
         taskName.textContent = task.name;
         taskName.contentEditable = false;
         // Stylisation
-        taskName.style.fontSize = 'clamp(16px, 1.75vw, 20px)';
+        taskName.style.fontSize = 'clamp(12px, 1.35vw, 16px)';
+        taskName.style.textTransform = "uppercase";
         taskName.style.color = 'chocolate';
         taskName.style.fontWeight = 'bold';
 
         const taskPublication = document.createElement('p'); // Date de publication de la tâche
         taskPublication.textContent = task.date;
         // Stylisation
-        taskPublication.style.marginBlock = '.75vw';
         taskPublication.style.fontSize = 'clamp(8px, 1vw, 12px)';
 
         // Ajout du nom et de la date de publication de la tâche à la section convenue
@@ -163,7 +167,7 @@ function editTask(index, taskName, buttonDiv) {
     const existingButtons = buttonDiv.querySelectorAll('.edit-buttons');
     if (existingButtons.length > 0) {
         return;
-    }
+    };
 
     // Création du bouton "Sauvegarder"
     const saveButton = document.createElement('button');
@@ -177,7 +181,7 @@ function editTask(index, taskName, buttonDiv) {
     taskName.addEventListener('keydown', function (e) {
         const isControlKey = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight'].includes(e.key);
 
-        if (!isControlKey && taskName.textContent.length > 40) {
+        if (!isControlKey && taskName.textContent.length > 30) {
             e.preventDefault();
         };
     });
@@ -189,6 +193,8 @@ function editTask(index, taskName, buttonDiv) {
     cancelButton.style.padding = ".25rem";
     cancelButton.style.fontSize = 'clamp(8px, 1vw, 12px)';
     cancelButton.classList.add('edit-buttons');
+
+    buttonDiv.style.justifyContent = "space-between";
 
     // Intégration de ces boutons à la tâche
     buttonDiv.appendChild(saveButton);
@@ -203,6 +209,7 @@ function saveEditedTask(index, taskName, saveButton, buttonDiv) {
         taskName.contentEditable = false;
         saveButton.remove();
         buttonDiv.querySelector('.edit-buttons').remove();
+        buttonDiv.style.justifyContent = "normal";
         return;
     }
 
@@ -212,14 +219,16 @@ function saveEditedTask(index, taskName, saveButton, buttonDiv) {
     taskName.contentEditable = false;
     saveButton.remove();
     buttonDiv.querySelector('button').remove();
+    buttonDiv.style.justifyContent = "normal";
     displayTasks();
 }
 
 // Fonction pour annuler les modifications de la tâche
-function cancelEdit(index, taskName, saveButton, cancelButton) {
+function cancelEdit(index, taskName, saveButton, cancelButton, buttonDiv) {
     taskName.contentEditable = false;
     saveButton.remove();
     cancelButton.remove();
+    buttonDiv.style.justifyContent = "normal";
     taskName.textContent = tasks[index].name;
 }
 
