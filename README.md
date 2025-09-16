@@ -1,5 +1,6 @@
 ﻿# Intitulé du projet
 To-do List en JavaScript
+
 Date de création du dossier : 03/06/2024
 
 ## **Langage(s) de programmation utilisé(s) pour ce dossier** : 
@@ -36,3 +37,4 @@ Pour répondre à plusieurs contraintes pouvant perturber le confort de l'utilis
 - Rendre l'application responsive ;
 
 - Possibilité d'ajouter des listes, dans lesquelles la création de tâches est possible.
+
